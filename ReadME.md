@@ -49,18 +49,18 @@ The design is created for *ntrials*. As demonstrated in the manuscript, this is 
 
 As we perform parameter estimations for *nreps* Monte Carlo repetitions, computational time can increase exponentially.  
 The computational time strongly depends on the number of participants (*npp*) and the number of Monte Carlo repetitions (*nreps*). We recommend to set *nreps* to 250. Smaller numbers can be used as well but then power computations will be less precise.   
-Notably, also increasing the number of trials in the task design (*ntrials*) can significantly increase the power computations in COMPASS.  
+Notably, also increasing the number of trials in the task design (*ntrials*) can significantly increase the power computation time in COMPASS.  
 
 As a partial solution for this computation time, the option is included to run the power analysis on multiple cores. This happens when the user defines the *full_speed* option as 1; if this option is activated, all minus two cores on the computer will be used for power computations.  
 
-When running COMPASS it will asap provide an estimate of how long it will take to calculate the power for each power computation (each row of the csv files is one power computation).  
+When running COMPASS it will asap provide an estimate of how long it will take to calculate the power for each power computation (each row of the csv files specify one power computation).  
 This estimate is based on the time it takes to execute a single repetition and calculated by multiplying the total number of repetitions by the time required for a single repetition, divided by the number of cores that are used in the power analysis.   
 
 If you want to stop the process whilst running, you can use 'ctrl + C' in the anaconda prompt shell. This will stop the execution of the script.   
 
 ## Runnig power computations with COMPASS  
 As described in the manuscript, three criterions for power computations are specified.  
-For each criterion, we provide a csv file which holds the power variables that should be specified by the user.  
+For each criterion (IC, EC or GD), we provide a csv file which holds the power variables that should be specified by the user.  
 For all criterions, power is specified as  
 
   ```power = Pr(Statistic > cut-off | Hypothesis)```
@@ -69,22 +69,23 @@ Here, the statistic differs across criterions and the cut-off and hypothesis sho
 
 Power computations consist of the following five steps:   
   1. Sample *npp* participants from the population.   
-  This sampling process is guided by the hypothesis (population distribution of parameter values, true correlation or difference between groups) that is specified by the user in the csv files.  
+  This sampling process is guided by the hypothesis that is specified by the user in the csv files.  (population distribution of parameter values (for IC), true correlation (for EC) or difference between groups (for GD))   
   2. Simulate data for each participant.  
   3. Estimate the best fitting parameters for each participant given the simulated data.   
   These are the ‘estimated parameters’.  
   4. Compute statistics.  
   The statistic differs across criterions.    
       - _internal_correlation_: correlation between sampled and estimated parameter values.    
-      - _external_correlation_: correlation between estimated parameter values and external measure (e.g., questionnaire score) that is correlated with sampled parameter values.    
+      - _external_correlation_: correlation between estimated parameter values and external measure (e.g., questionnaire score).    
       - _group_difference_: T-statistic of difference in parameter values between two groups.    
   5. Evaluate which proportion of statistics reached the cut-off value.  
 
 ### The steps for the user
 1. Make sure that COMPASS is installed correctly (see Installation guide above).  
 
-2. Choose a criterion and specify variables in the corresponding csv file.
-*Notice that multiple rows can be specified in the csv files, power computations will be performed for each row that is completed by the user*  
+2. Choose a criterion and specify variables in the corresponding csv file.  
+*Notice that multiple rows can be specified in the csv files, power computations will be performed for each row that is completed by the user*    
+  
   2a) Internal Correlation (IC): Correlation between sampled and estimated parameter values.  
   
   Open the InputFile_IC and specify  
@@ -219,14 +220,13 @@ Power computations consist of the following five steps:
     <img width="500" alt="image" src="https://github.com/MaudBeeckmans/COMPASS/blob/Version-0.2/Figures/ReadMe/OutputIC_plotexample.png">
     
 # Contact
-
-- Internship student: Maud Beeckmans 
-    * [E-mail me at Maud (dot) Beeckmans (at) UGent (dot) be](mailto:Maud.Beeckmans@UGent.be)
-- Supervising Post-doc researcher: Pieter Verbeke
+- Corresponding author: Pieter Verbeke
     * [E-mail me at pjverbek (dot) Verbeke (at) UGent (dot) be](mailto:pjverbek.Verbeke@UGent.be)
+- First author (internship student): Maud Beeckmans 
+    * [E-mail me at Maud (dot) Beeckmans (at) UGent (dot) be](mailto:Maud.Beeckmans@UGent.be)
 - Supervising PhD researcher: Pieter Huycke
     * [E-mail me at Pieter (dot) Huycke (at) UGent (dot) be](mailto:Pieter.Huycke@UGent.be)
-- Supervising professor: Tom Verguts
+- Supervising PI: Tom Verguts
     * [E-mail me at Tom (dot) Verguts (at) UGent (dot) be](mailto:Tom.Verguts@UGent.be)
 
 **Last edit: December 20th 2022**
