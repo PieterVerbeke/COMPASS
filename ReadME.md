@@ -3,18 +3,20 @@
 
 # COmputational Power Analysis using Simulations "COMPASS" toolbox 
 
-This toolbox has been developed to evaluate statistical power when using parameter estimates from computational models <img width="15" alt="image" src="https://user-images.githubusercontent.com/73498415/156181828-ee3782a8-c534-4458-82df-0c7b7323f4c9.png"> In the current version, use is limited to the Rescorla-Wagner (RW) model in two-armed bandit tasks.
+This toolbox has been developed to evaluate statistical power when using parameter estimates from computational models.
+
+In the current version, use is limited to the Rescorla-Wagner (RW) model in two-armed bandit tasks.
 
 ## Installation guide
-*Step 1:* Downloading all folders and storing them locally on your own pc
-*Step 2:* Creating the PyPower environment
-  Normally, power analyses with COMPASS should be possible in a basic Python environment.
-  Nevertheless, to control for version issues, we provide environment files for windows and mac users.
-   * Install Anaconda 3 by following their [installation guide](https://docs.anaconda.com/anaconda/install/windows/)
-   * When the installation is complete, open an Anaconda prompt
-   * Go to the directory where the COMPASS files are stored using ```cd```
-   * For windows, run: ```conda env create --file environment_windows.yml``` and for mac, run ```conda env create --file environment_mac.yml```
-   * Allow the installation of all required packages
+*Step 1:* Downloading all folders and storing them locally on your own pc.  
+*Step 2:* Creating the PyPower environment  
+  Normally, power analyses with COMPASS should be possible in a basic Python environment.  
+  Nevertheless, to control for version issues, we provide environment files for windows and mac users.  
+   * Install Anaconda 3 by following their [installation guide](https://docs.anaconda.com/anaconda/install/windows/)  
+   * When the installation is complete, open an Anaconda prompt  
+   * Go to the directory where the COMPASS files are stored using ```cd```  
+   * For windows, run: ```conda env create --file environment_windows.yml``` and for mac, run ```conda env create --file environment_mac.yml```  
+   * Allow the installation of all required packages  
    
 ## The model and task currently implemented in COMPASS
 ### The RW model
