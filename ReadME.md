@@ -59,13 +59,13 @@ This estimate is based on the time it takes to execute a single repetition and c
 If you want to stop the process whilst running, you can use 'ctrl + C' in the anaconda prompt shell. This will stop the execution of the script.   
 
 ## Runnig power computations with COMPASS  
-As described in the manuscript, three criterions for power computations are specified.  
+As described in the manuscript, three criteria for power computations are specified.  
 For each criterion (IC, EC or GD), we provide a csv file which holds the power variables that should be specified by the user.  
-For all criterions, power is specified as  
+For all criteria, power is specified as  
 
   ```power = Pr(Statistic > cut-off | Hypothesis)```
 
-Here, the statistic differs across criterions and the cut-off and hypothesis should be specified by the user.  
+Here, the statistic differs across criteria and the cut-off and hypothesis should be specified by the user.  
 
 Power computations consist of the following five steps:   
   1. Sample *npp* participants from the population.   
@@ -74,7 +74,7 @@ Power computations consist of the following five steps:
   3. Estimate the best fitting parameters for each participant given the simulated data.   
   These are the ‘estimated parameters’.  
   4. Compute statistics.  
-  The statistic differs across criterions.    
+  The statistic differs across criteria.    
       - _internal_correlation_: correlation between sampled and estimated parameter values.    
       - _external_correlation_: correlation between estimated parameter values and external measure (e.g., questionnaire score).    
       - _group_difference_: T-statistic of difference in parameter values between two groups.    
