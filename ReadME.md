@@ -7,6 +7,8 @@ This toolbox has been developed to evaluate statistical power when using paramet
 
 In the current version, use is limited to the Rescorla-Wagner (RW) model in two-armed bandit tasks.
 
+More details can be found in the manuscript: *Insert link when preprint is online*
+
 ## Installation guide
 *Step 1:* Downloading all folders and storing them locally on your own pc.  
 *Step 2:* Creating the PyPower environment  
@@ -15,44 +17,43 @@ In the current version, use is limited to the Rescorla-Wagner (RW) model in two-
    * Install Anaconda 3 by following their [installation guide](https://docs.anaconda.com/anaconda/install/windows/)  
    * When the installation is complete, open an Anaconda prompt  
    * Go to the directory where the COMPASS files are stored using ```cd```  
-   * For windows, run: ```conda env create --file environment_windows.yml``` and for mac, run ```conda env create --file environment_mac.yml```  
+   * For windows, run: ```conda env create --file environment_windows.yml```   and for mac, run ```conda env create --file environment_mac.yml```  
    * Allow the installation of all required packages  
    
 ## The model and task currently implemented in COMPASS
 ### The RW model
-*To specify by the user: meanLR, sdLR, meanInverseTemperature and sdInverseTemperature*
-The RW model is used to fit participants’ behaviour in this task. 
-The core of the model is formed by the delta-learning rule and the softmax choice rule. 
-The model has two free parameters: the learning rate 𝛼 and the inverse temperature 𝜆.
-The population distribution of these parameters can be specified by the user in the csv files.
+*To specify by the user: meanLR, sdLR, meanInverseTemperature and sdInverseTemperature*  
+The RW model is used to fit participants’ behaviour in this task.   
+The core of the model is formed by the delta-learning rule and the softmax choice rule.   
+The model has two free parameters: the learning rate and the inverse temperature (see manuscript for details).    
+The population distribution of these parameters can be specified by the user in the csv files.  
 
 ### Two-armed bandit task
-*To specify by the user: ntrials, nreversals, reward_probability*
-Based on the parameters that are implemented in the csv files, a task design is created.
-In this task design, there are two stimuli/bandits and two possible actions (selecting bandit 1 or 2). 
-One bandit is more optimal since it has a higher probability of reward (specified by *reward_probability*). 
-For simplicity, we implement that Pr(Reward | optimal_bandit) = 1- Pr(Reward | suboptimal_bandit)
-As in classic reversal learning tasks, we provide the option that the identity of the optimal bandit can reverse. Here, one has to specify the frequency of rule reversals (*nreversals*). If set to zero, there are no reversals. 
-The design is created for *ntrials*. As demonstrated in the manuscript, this is a crucial variable for obtaining reliable parameter estimates and high statistical power.
+*To specify by the user: ntrials, nreversals, reward_probability*  
+Based on the parameters that are implemented in the csv files, a task design is created.  
+In this task design, there are two stimuli/bandits and two possible actions (selecting bandit 1 or 2).   
+One bandit is more optimal since it has a higher probability of reward (specified by *reward_probability*).   
+For simplicity, we implement that Pr(Reward | optimal_bandit) = 1- Pr(Reward | suboptimal_bandit).  
+As in classic reversal learning tasks, we provide the option that the identity of the optimal bandit can reverse. Here, one has to specify the frequency of rule reversals (*nreversals*). If set to zero, there are no reversals.   
+The design is created for *ntrials*. As demonstrated in the manuscript, this is a crucial variable for obtaining reliable parameter estimates and high statistical power.  
 
-## Important note: the required computational time
-*To specify by the user: npp, nreps, full_speed*
-As we perform parameter estimations for *nreps* Monte Carlo repetitions, computational time can increase exponentially.
+## Important note: the required computational time.  
+*To specify by the user: npp, nreps, full_speed*  
+As we perform parameter estimations for *nreps* Monte Carlo repetitions, computational time can increase exponentially.  
+The computational time strongly depends on the number of participants (*npp*) and the number of Monte Carlo repetitions (*nreps*). We recommend to set *nreps* to 250. Smaller numbers can be used as well but then power computations will be less precise.   
+Notably, also increasing the number of trials in the task design (*ntrials*) can significantly increase the power computations in COMPASS.  
 
-The computational time strongly depends on the number of participants (*npp*) and the number of Monte Carlo repetitions (*nreps*). We recommend to set *nreps* to 250. Smaller numbers can be used as well but then power computations will be less precise. 
-Notably, also increasing the number of trials in the task design (*ntrials*) can significantly increase the power computations in COMPASS.
+As a partial solution for this computation time, the option is included to run the power analysis on multiple cores. This happens when the user defines the *full_speed* option as 1; if this option is activated, all minus two cores on the computer will be used for power computations.  
 
-As a partial solution for this computation time, the option is included to run the power analysis on multiple cores. This happens when the user defines the 'full_speed' option as 1; if this option is activated, all minus two cores on the computer  doing the power analysis will be used.  
+When running COMPASS it will asap provide an estimate of how long it will take to calculate the power for each power computation (each row of the csv files is one power computation).  
+This estimate is based on the time it takes to execute a single repetition and calculated by multiplying the total number of repetitions by the time required for a single repetition, divided by the number of cores that are used in the power analysis.   
 
-When running COMPASS it will as fast as possible provide an estimate of how long it will take to calculate the power for each power computation (each row of the csv files is one power computation). 
-This estimate is based on the time it takes to execute a single repetition and calculated by multiplying the total number of repetitions included by the time required for a single repetition, divided by the number of cores that are used in the power analysis. 
+If you want to stop the process whilst running, you can use 'ctrl + C' in the anaconda prompt shell. This will stop the execution of the script.   
 
-If you want to stop the process whilst running, you can use 'ctrl + C' in the anaconda prompt shell. This will stop the execution of the script. 
-
-## Runnig power computations with COMPASS
-As described in the manuscript, three criterions for power computations are specified.
-For each criterion, we provide a csv file which holds the power variables that should be specified by the user.
-For all criterions, power is specified as
+## Runnig power computations with COMPASS  
+As described in the manuscript, three criterions for power computations are specified.  
+For each criterion, we provide a csv file which holds the power variables that should be specified by the user.  
+For all criterions, power is specified as  
 
   ```power = Pr(Statistic > cut-off | Hypothesis)```
 
@@ -65,47 +66,45 @@ Each parameter recovery analysis consists of the following four steps:
   3. Estimate the best fitting parameters for each participant given the simulated data. These are the ‘recovered parameters’. 
   4. Compute statistics
   The statistic differs across criterions.
-      - _internal_correlation_: <img width="100" alt="image" src="https://user-images.githubusercontent.com/73498415/156185769-cad73153-2b53-4707-a266-67c376a00c79.png">
-      correlation between sampled and recovered parameter values
-      - _external_correlation_: <img width="100" alt="image" src="https://user-images.githubusercontent.com/73498415/156185769-cad73153-2b53-4707-a266-67c376a00c79.png">
-      correlation between recovered parameter values and external measure that is correlated with sampled parameter values.
-      - _group_difference_: <img width="50" alt="image" src="https://user-images.githubusercontent.com/73498415/156185831-2f654264-82a4-44e9-abd3-676033fb6cd9.png">       T-statistic of difference in parameter values between two groups.
+      - _internal_correlation_: correlation between sampled and recovered parameter values.  
+      - _external_correlation_: correlation between recovered parameter values and external measure that is correlated with sampled parameter values.  
+      - _group_difference_: T-statistic of difference in parameter values between two groups.  
   5. Evaluate which proportion of statistics reached the cut-off value
 
 ### The steps
 1. Make sure that COMPASS is installed correctly
 
-2. Choose a criterion and specify variables in the corresponding csv file.
+2. Choose a criterion and specify variables in the corresponding csv file.  
   2a) Internal Correlation (IC): Correlation between sampled and recovered parameter values.
   
   Open the InputFile_IC and specify
   * _ntrials_: integer 𝜖 [5, +∞[
 	**number of trials within the experiment (minimal 5)**
-* _nreversals_: integer 𝜖 [0, ntrials[
+  * _nreversals_: integer 𝜖 [0, ntrials[
 	**number of rule reversals within the experiment**
-* _npp_: integer 𝜖 [5, +∞[ 
+  * _npp_: integer 𝜖 [5, +∞[ 
 	**total number of participants within the experiment (minimal 5)**
-* _meanLR_: float 𝜖 [0, 1]
+  * _meanLR_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of learning rates**
-* _sdLR_: float 𝜖 [0, 1]
+  * _sdLR_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of learning rates**
-* _meanInverseTemperature_: float 𝜖 [0, 1]
+  * _meanInverseTemperature_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of inverse temperatures**
-* _sdInverseTemperature_: float 𝜖 [0, 1]
+  * _sdInverseTemperature_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of inverse temperatures**
-* _reward_probability_: float 𝜖 [0, 1] 
+  * _reward_probability_: float 𝜖 [0, 1] 
 	**The probability of reward for the optimal bandit in the two-arm bandit task.**
-* _tau_: float 𝜖 [0, 1] 
+  * _tau_: float 𝜖 [0, 1] 
 	**the value against which the obtained statistic will be compared to define significance of the repetition.**
 	- correlation: cut_off = minimally desired correlation - recommended: 0.75
-* _full_speed_: integer (0 or 1)
+  * _full_speed_: integer (0 or 1)
 	**Define whether you want to do the power analysis at full speed.**
 	- 0 = only one core will be used (slow)
 	- 1 = (all-2) cores will be used (much faster, recommended unless you need your computer for other intensive tasks such as meetings)
-* _nreps_: integer 𝜖 [1, +∞[ 
+  * _nreps_: integer 𝜖 [1, +∞[ 
 	**Number of repetitions that will be conducted to estimate the power**
 	- Recommended number: 250
-* _output_folder_: string
+  * _output_folder_: string
 	**Path to the folder where the output-figure(s) will be stored**
 	- e.g. "C:\Users\maudb\Downloads"
 
@@ -114,34 +113,34 @@ Each parameter recovery analysis consists of the following four steps:
   Open the InputFile_IC and specify
   * _ntrials_: integer 𝜖 [5, +∞[
 	**number of trials within the experiment (minimal 5)**
-* _nreversals_: integer 𝜖 [0, ntrials[
+  * _nreversals_: integer 𝜖 [0, ntrials[
 	**number of rule reversals within the experiment**
-* _npp_: integer 𝜖 [5, +∞[ 
+  * _npp_: integer 𝜖 [5, +∞[ 
 	**total number of participants within the experiment (minimal 5)**
-* _meanLR_: float 𝜖 [0, 1]
+  * _meanLR_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of learning rates**
-* _sdLR_: float 𝜖 [0, 1]
+  * _sdLR_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of learning rates**
-* _meanInverseTemperature_: float 𝜖 [0, 1]
+  * _meanInverseTemperature_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of inverse temperatures**
-* _sdInverseTemperature_: float 𝜖 [0, 1]
+  * _sdInverseTemperature_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of inverse temperatures**
-* _reward_probability_: float 𝜖 [0, 1] 
+  * _reward_probability_: float 𝜖 [0, 1] 
 	**The probability of reward for the optimal bandit in the two-arm bandit task.**
-*_True_correlation_: float 𝜖 [-1, 1] 
+  *_True_correlation_: float 𝜖 [-1, 1] 
   **The hypothesized correlation between the learning rate parameter values and the external measure**
-* _TypeIerror_: float 𝜖 [0, 1] 
+  * _TypeIerror_: float 𝜖 [0, 1] 
 	**The allowed probability to make a type I error; the significance level**
 	- standard (and recommended) value: 0.05
 	- correlation: cut_off = minimally desired correlation - recommended: 0.75
-* _full_speed_: integer (0 or 1)
+  * _full_speed_: integer (0 or 1)
 	**Define whether you want to do the power analysis at full speed.**
 	- 0 = only one core will be used (slow)
 	- 1 = (all-2) cores will be used (much faster, recommended unless you need your computer for other intensive tasks such as meetings)
-* _nreps_: integer 𝜖 [1, +∞[ 
+  * _nreps_: integer 𝜖 [1, +∞[ 
 	**Number of repetitions that will be conducted to estimate the power**
 	- Recommended number: 250
-* _output_folder_: string
+  * _output_folder_: string
 	**Path to the folder where the output-figure(s) will be stored**
 	- e.g. "C:\Users\maudb\Downloads"
 	
@@ -150,39 +149,39 @@ Each parameter recovery analysis consists of the following four steps:
   Open the InputFile_GD and specify
   * _ntrials_: integer 𝜖 [5, +∞[
 	**number of trials within the experiment (minimal 5)**
-* _nreversals_: integer 𝜖 [0, ntrials[
+  * _nreversals_: integer 𝜖 [0, ntrials[
 	**number of rule reversals within the experiment**
-* _npp_group_: integer 𝜖 [5, +∞[ 
+  * _npp_group_: integer 𝜖 [5, +∞[ 
 	**number of participants within the experiment (minimal 5)**
-* _meanLR_g1_: float 𝜖 [0, 1]
+  * _meanLR_g1_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of learning rates for group 1**
-* _sdLR_: float 𝜖 [0, 1]
+  * _sdLR_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of learning rates for group 1** 
-* _meanLR_g2_: float 𝜖 [0, 1]
+  * _meanLR_g2_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of learning rates for group 2**
-* _sdLR_g2_: float 𝜖 [0, 1]
+  * _sdLR_g2_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of learning rates for group 2** 
-* _meanInverseTemperature_g1_: float 𝜖 [0, 1]
+  * _meanInverseTemperature_g1_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of inverse temperatures for group 1**
-* _sdInverseTemperature_g1_: float 𝜖 [0, 1]
+  * _sdInverseTemperature_g1_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of inverse temperatures for group 1**
-* _meanInverseTemperature_g2_: float 𝜖 [0, 1]
+  * _meanInverseTemperature_g2_: float 𝜖 [0, 1]
 	**mean of the assumed population distribution of inverse temperatures for group 2**
-* _sdInverseTemperature_g2_: float 𝜖 [0, 1]
+  * _sdInverseTemperature_g2_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of inverse temperatures for group 2**
-* _reward_probability_: float 𝜖 [0, 1] 
+  * _reward_probability_: float 𝜖 [0, 1] 
   **The probability of reward for the optimal bandit in the two-arm bandit task.**
-* _TypeIerror_: float 𝜖 [0, 1] 
+  * _TypeIerror_: float 𝜖 [0, 1] 
 	**The allowed probability to make a type I error; the significance level**
 	- standard (and recommended) value: 0.05
-* _full_speed_: integer (0 or 1)
+  * _full_speed_: integer (0 or 1)
 	**Define whether you want to do the power analysis at full speed.**
 	- 0 = only one core will be used (slow)
 	- 1 = (all-2) cores will be used (much faster, recommended unless you need your computer for other intensive tasks such as meetings)
-* _nreps_: integer 𝜖 [1, +∞[ 
+  * _nreps_: integer 𝜖 [1, +∞[ 
 	**Number of repetitions that will be conducted to estimate the power**
 	- Recommended number: 250
-* _output_folder_: string
+  * _output_folder_: string
 	**Path to the folder where the output-figure(s) will be stored**
 	- e.g. "C:\Users\maudb\Downloads"
   
