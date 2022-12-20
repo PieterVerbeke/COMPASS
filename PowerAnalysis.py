@@ -228,7 +228,7 @@ def power_estimation_groupdifference(npp_per_group = 20, ntrials = 480, nreps = 
     if __name__ == '__main__':
         # First: check what the power is when parameter estimations are perfect
         if HPC == False:
-            power = tt_ind_solve_power(nobs1 = npp_per_group, ratio = 1, effect_size = cohens_d, alpha = typeIerror, power = None,
+            power_true = tt_ind_solve_power(nobs1 = npp_per_group, ratio = 1, effect_size = cohens_d, alpha = typeIerror, power = None,
                                     alternative = 'larger')
             print("\nPower to obtain a significant group difference under conventional implementation: {}%".format(np.round(power_true*100,2)))
 
