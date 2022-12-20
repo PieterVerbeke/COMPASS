@@ -1,55 +1,86 @@
 [![Uni](https://img.shields.io/badge/University-Ghent%20University-brightgreen)](https://img.shields.io/badge/University-Ghent%20University-brightgreen)
-[![AY](https://img.shields.io/badge/Academic%20Year-2021--2022-yellow)](https://img.shields.io/badge/Academic%20Year-2021--2022-yellow)
+[![Date](https://img.shields.io/badge/Last%20update-2022-yellow)](https://img.shields.io/badge/Last%20update-2022-yellow)
 
 # COmputational Power Analysis using Simulations "COMPASS" toolbox 
 
-This toolbox has been developed to estimate the power of obtaining adequate learning rate estimates <img width="15" alt="image" src="https://user-images.githubusercontent.com/73498415/156181828-ee3782a8-c534-4458-82df-0c7b7323f4c9.png"> when using a Rescorla-Wagner model (RW model) to mimic participants’ behaviour on a probabilistic reversal learning task. 
+This toolbox has been developed to evaluate statistical power when using parameter estimates from computational models <img width="15" alt="image" src="https://user-images.githubusercontent.com/73498415/156181828-ee3782a8-c534-4458-82df-0c7b7323f4c9.png"> In the current version, use is limited to the Rescorla-Wagner (RW) model in two-armed bandit tasks.
 
-## The model and task currently implemented in COMPASS   
-### Probabilistic reversal learning task 
-In this task participants try to maximise the reward they get by implicitly learning the stimulus-response mapping rules. 
-There are two stimuli (coded as 0 and 1) and two possible responses (coded as 0 and 1) in this design. 
-Two rules are used throughout the experiment: the first rule is ‘respond with response 0 to stimulus 1 and with a response 1 to stimulus 0’; the second rule reverses this stimulus-response mapping. 
-Rule reversals can happen. Feedback is given on each trial (0 = no reward, 1 = reward), but this feedback is only in a certain defined percentage of the trials congruent with the current rule. 
-
+## Installation guide
+*Step 1:* Downloading all folders and storing them locally on your own pc
+*Step 2:* Creating the PyPower environment
+  Normally, power analyses with COMPASS should be possible in a basic Python environment.
+  Nevertheless, to control for version issues, we provide environment files for windows and mac users.
+   * Install Anaconda 3 by following their [installation guide](https://docs.anaconda.com/anaconda/install/windows/)
+   * When the installation is complete, open an Anaconda prompt
+   * Go to the directory where the COMPASS files are stored using ```cd```
+   * For windows, run: ```conda env create --file environment_windows.yml``` and for mac, run ```conda env create --file environment_mac.yml```
+   * Allow the installation of all required packages
+   
+## The model and task currently implemented in COMPASS
 ### The RW model
-The RW model is used to mimic participants’ behaviour in this task. 
+*To specify by the user: meanLR, sdLR, meanInverseTemperature and sdInverseTemperature*
+The RW model is used to fit participants’ behaviour in this task. 
 The core of the model is formed by the delta-learning rule and the softmax choice rule. 
 The model has two free parameters: the learning rate 𝛼 and the inverse temperature 𝜆.
+The population distribution of these parameters can be specified by the user in the csv files.
 
-## Important limitation: the required computational time
-The computational time for these power estimates is quite large. This computational time depends on several factors: the number of trials, the number of participants and the number of repetitions included in the power estimate. Therefore, the option is included to run the power analysis on multiple cores. This happens when the user defines the 'full_speed' option as 1; if this option is activated, all minus two cores on the computer  doing the power analysis will be used.  
-When using the template for the InputFile_IC.csv and the InputFile_GD.csv on GitHub, the power analysis takes ca. 10 minutes when running on a single core and ca. 2 minutes when running on a computer with 16 cores. It is important to realise that any increase in the number of trials, participants or repetitions used for the power analysis will increase the computation time. 
-COMPASS gives an estimate of how long it will take to calculate the power for each line within this Input_file, at the beginning of the execution of each line. This estimate is based on the time it takes to execute a single repetition and calculated by multiplying the total number of repetitions included by the time required for a single repetition, divided by the number of cores that are used in the power analysis. If you want to stop the process whilst running, you can use 'ctrl + C' in the anaconda prompt shell. This will completely stop the execution of the script. 
+### Two-armed bandit task
+*To specify by the user: ntrials, nreversals, reward_probability*
+Based on the parameters that are implemented in the csv files, a task design is created.
+In this task design, there are two stimuli/bandits and two possible actions (selecting bandit 1 or 2). 
+One bandit is more optimal since it has a higher probability of reward (specified by *reward_probability*). 
+For simplicity, we implement that Pr(Reward | optimal_bandit) = 1- Pr(Reward | suboptimal_bandit)
+As in classic reversal learning tasks, we provide the option that the identity of the optimal bandit can reverse. Here, one has to specify the frequency of rule reversals (*nreversals*). If set to zero, there are no reversals. 
+The design is created for *ntrials*. As demonstrated in the manuscript, this is a crucial variable for obtaining reliable parameter estimates and high statistical power.
 
-## Power estimation with COMPASS
-The power to obtain adequate parameter estimates is calculated by repeatedly conducting parameter recovery analyses. 
-This process is repeated in order to estimate the probability or power of a successful parameter recovery analysis. 
+## Important note: the required computational time
+*To specify by the user: npp, nreps, full_speed*
+As we perform parameter estimations for *nreps* Monte Carlo repetitions, computational time can increase exponentially.
 
-  ```power = number of successful parameter recovery analyses / total number of parameter recovery analyses```
+The computational time strongly depends on the number of participants (*npp*) and the number of Monte Carlo repetitions (*nreps*). We recommend to set *nreps* to 250. Smaller numbers can be used as well but then power computations will be less precise. 
+Notably, also increasing the number of trials in the task design (*ntrials*) can significantly increase the power computations in COMPASS.
+
+As a partial solution for this computation time, the option is included to run the power analysis on multiple cores. This happens when the user defines the 'full_speed' option as 1; if this option is activated, all minus two cores on the computer  doing the power analysis will be used.  
+
+When running COMPASS it will as fast as possible provide an estimate of how long it will take to calculate the power for each power computation (each row of the csv files is one power computation). 
+This estimate is based on the time it takes to execute a single repetition and calculated by multiplying the total number of repetitions included by the time required for a single repetition, divided by the number of cores that are used in the power analysis. 
+
+If you want to stop the process whilst running, you can use 'ctrl + C' in the anaconda prompt shell. This will stop the execution of the script. 
+
+## Runnig power computations with COMPASS
+As described in the manuscript, three criterions for power computations are specified.
+For each criterion, we provide a csv file which holds the power variables that should be specified by the user.
+For all criterions, power is specified as
+
+  ```power = Pr(Statistic > cut-off | Hypothesis)```
+
+Here, the statistic differs across criterions and the cut-off and hypothesis should be specified by the user.
 
 Each parameter recovery analysis consists of the following four steps: 
-  1. Sample npp participants from the population (npp parameter sets)
-  2. Simulate data for each participant (= each parameter set)
+  1. Sample *npp* participants from the population. 
+  This sampling process is guided by the hypothesis (population distribution of parameter values, true correlation or difference between groups) that is specified by the user in the csv files.
+  2. Simulate data for each participant
   3. Estimate the best fitting parameters for each participant given the simulated data. These are the ‘recovered parameters’. 
-  4. Evaluate whether the parameter recovery analysis was successful. This depends on the parameter recovery criterion defined by the researcher. 	
-     - _internal_correlation_: <img width="100" alt="image" src="https://user-images.githubusercontent.com/73498415/156185769-cad73153-2b53-4707-a266-67c376a00c79.png">
-     - _group_difference_: <img width="50" alt="image" src="https://user-images.githubusercontent.com/73498415/156185831-2f654264-82a4-44e9-abd3-676033fb6cd9.png"> (success when p_value ≼ cut_off)
-## How to use COMPASS.
-1. Download all files from this github-folder and store them in the same folder on your computer.
+  4. Compute statistics
+  The statistic differs across criterions.
+      - _internal_correlation_: <img width="100" alt="image" src="https://user-images.githubusercontent.com/73498415/156185769-cad73153-2b53-4707-a266-67c376a00c79.png">
+      correlation between sampled and recovered parameter values
+      - _external_correlation_: <img width="100" alt="image" src="https://user-images.githubusercontent.com/73498415/156185769-cad73153-2b53-4707-a266-67c376a00c79.png">
+      correlation between recovered parameter values and external measure that is correlated with sampled parameter values.
+      - _group_difference_: <img width="50" alt="image" src="https://user-images.githubusercontent.com/73498415/156185831-2f654264-82a4-44e9-abd3-676033fb6cd9.png">       T-statistic of difference in parameter values between two groups.
+  5. Evaluate which proportion of statistics reached the cut-off value
 
-2. Adapt the relevant input file depending on whether you want to rely on the internal correlation criterion (IC) or the group difference criterion (GD). 
-	- internal correlation: <img width="80" alt="image" src="https://user-images.githubusercontent.com/73498415/156186624-bf2d4c13-4da9-47bb-a9a6-34c27ddeebbc.png">
-	- group difference: <img width="300" alt="image" src="https://user-images.githubusercontent.com/73498415/156186716-bf9b9ab2-86bc-4045-9af7-61b0e9996536.png">
+### The steps
+1. Make sure that COMPASS is installed correctly
 
-2a) IC: Open the InputFile_IC.csv and adapt the variables to define your model, statistic parameters and cut-off (tau). 
-
-<img width="634" alt="image" src="https://github.com/MaudBeeckmans/COMPASS/blob/Version-0.2/Figures/ReadMe/InputIC_example.png">
-
-* _ntrials_: integer 𝜖 [5, +∞[
+2. Choose a criterion and specify variables in the corresponding csv file.
+  2a) Internal Correlation (IC): Correlation between sampled and recovered parameter values.
+  
+  Open the InputFile_IC and specify
+  * _ntrials_: integer 𝜖 [5, +∞[
 	**number of trials within the experiment (minimal 5)**
 * _nreversals_: integer 𝜖 [0, ntrials[
-	**number of rule reversals within the eximerpent**
+	**number of rule reversals within the experiment**
 * _npp_: integer 𝜖 [5, +∞[ 
 	**total number of participants within the experiment (minimal 5)**
 * _meanLR_: float 𝜖 [0, 1]
@@ -61,8 +92,7 @@ Each parameter recovery analysis consists of the following four steps:
 * _sdInverseTemperature_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of inverse temperatures**
 * _reward_probability_: float 𝜖 [0, 1] 
-	**The probability that reward will be congruent with the current stimulus-response mapping rule.**
-	- If reward_probability = 0.80, the feedback will be congruent with the rule in 80% of the trials.
+	**The probability of reward for the optimal bandit in the two-arm bandit task.**
 * _tau_: float 𝜖 [0, 1] 
 	**the value against which the obtained statistic will be compared to define significance of the repetition.**
 	- correlation: cut_off = minimally desired correlation - recommended: 0.75
@@ -72,19 +102,54 @@ Each parameter recovery analysis consists of the following four steps:
 	- 1 = (all-2) cores will be used (much faster, recommended unless you need your computer for other intensive tasks such as meetings)
 * _nreps_: integer 𝜖 [1, +∞[ 
 	**Number of repetitions that will be conducted to estimate the power**
-	- Recommended number: minimal 100
+	- Recommended number: 250
 * _output_folder_: string
 	**Path to the folder where the output-figure(s) will be stored**
 	- e.g. "C:\Users\maudb\Downloads"
 
-2b) GD: Open the InputFile_GD.csv and adapt the variables to define your model, statistic parameters and typeIerror. 
-
-<img width="900" alt="image" src="https://github.com/MaudBeeckmans/COMPASS/blob/Version-0.2/Figures/ReadMe/InputGD_example.png">
-
-* _ntrials_: integer 𝜖 [5, +∞[
+  2b) External Correlation (EC): Correlation between recovered parameter values and external measure (e.g., Questionnaire scores).
+  
+  Open the InputFile_IC and specify
+  * _ntrials_: integer 𝜖 [5, +∞[
 	**number of trials within the experiment (minimal 5)**
 * _nreversals_: integer 𝜖 [0, ntrials[
-	**number of rule reversals within the eximerpent**
+	**number of rule reversals within the experiment**
+* _npp_: integer 𝜖 [5, +∞[ 
+	**total number of participants within the experiment (minimal 5)**
+* _meanLR_: float 𝜖 [0, 1]
+	**mean of the assumed population distribution of learning rates**
+* _sdLR_: float 𝜖 [0, 1]
+	**sd of the assumed population distribution of learning rates**
+* _meanInverseTemperature_: float 𝜖 [0, 1]
+	**mean of the assumed population distribution of inverse temperatures**
+* _sdInverseTemperature_: float 𝜖 [0, 1]
+	**sd of the assumed population distribution of inverse temperatures**
+* _reward_probability_: float 𝜖 [0, 1] 
+	**The probability of reward for the optimal bandit in the two-arm bandit task.**
+*_True_correlation_: float 𝜖 [-1, 1] 
+  **The hypothesized correlation between the learning rate parameter values and the external measure**
+* _TypeIerror_: float 𝜖 [0, 1] 
+	**The allowed probability to make a type I error; the significance level**
+	- standard (and recommended) value: 0.05
+	- correlation: cut_off = minimally desired correlation - recommended: 0.75
+* _full_speed_: integer (0 or 1)
+	**Define whether you want to do the power analysis at full speed.**
+	- 0 = only one core will be used (slow)
+	- 1 = (all-2) cores will be used (much faster, recommended unless you need your computer for other intensive tasks such as meetings)
+* _nreps_: integer 𝜖 [1, +∞[ 
+	**Number of repetitions that will be conducted to estimate the power**
+	- Recommended number: 250
+* _output_folder_: string
+	**Path to the folder where the output-figure(s) will be stored**
+	- e.g. "C:\Users\maudb\Downloads"
+	
+	2c) Group Difference (GD): T-statistic for difference between recovered parameter values of two groups.
+
+  Open the InputFile_GD and specify
+  * _ntrials_: integer 𝜖 [5, +∞[
+	**number of trials within the experiment (minimal 5)**
+* _nreversals_: integer 𝜖 [0, ntrials[
+	**number of rule reversals within the experiment**
 * _npp_group_: integer 𝜖 [5, +∞[ 
 	**number of participants within the experiment (minimal 5)**
 * _meanLR_g1_: float 𝜖 [0, 1]
@@ -104,8 +169,7 @@ Each parameter recovery analysis consists of the following four steps:
 * _sdInverseTemperature_g2_: float 𝜖 [0, 1]
 	**sd of the assumed population distribution of inverse temperatures for group 2**
 * _reward_probability_: float 𝜖 [0, 1] 
-	**The probability that reward will be congruent with the current stimulus-response mapping rule.**
-	- If reward_probability = 0.80, the feedback will be congruent with the rule in 80% of the trials.
+  **The probability of reward for the optimal bandit in the two-arm bandit task.**
 * _TypeIerror_: float 𝜖 [0, 1] 
 	**The allowed probability to make a type I error; the significance level**
 	- standard (and recommended) value: 0.05
@@ -115,30 +179,22 @@ Each parameter recovery analysis consists of the following four steps:
 	- 1 = (all-2) cores will be used (much faster, recommended unless you need your computer for other intensive tasks such as meetings)
 * _nreps_: integer 𝜖 [1, +∞[ 
 	**Number of repetitions that will be conducted to estimate the power**
-	- Recommended number: minimal 100
+	- Recommended number: 250
 * _output_folder_: string
 	**Path to the folder where the output-figure(s) will be stored**
 	- e.g. "C:\Users\maudb\Downloads"
-    
-Both Input files can contain multiple rows with different requirements or design-options. 
-If the file contains multiple rows, the power will be estimated using the variables defined within each row sequentially. 
-This allows the researcher to elegantly compare the effect of changing a certain variable on the power estimate.     
-<img width="634" alt="image" src="https://github.com/MaudBeeckmans/COMPASS/blob/Version-0.2/Figures/ReadMe/Inputmultiplerows_example.png">
-
+  
 3. Run the PowerAnalysis.py script using the correct Anaconda 3 environment. 
    
-   To recreate the programming environment (**in Windows**), simply download our environment file (environment.yml) and take the following steps:
-   * Install Anaconda 3 by following their [installation guide](https://docs.anaconda.com/anaconda/install/windows/)
-   * When the installation is complete, open an Anaconda prompt
-   * Go to the directory where ```environment.yml``` is located using ```cd```
-   * Now, run: ```conda env create --file environment.yml```
-   * Allow the installation of all required packages
+   If one followed the Installation guide above, a PyPower environment has been created.
    
-   To execute the power analysis take the following steps: 
+   To use this environment: 
    * Open Anaconda prompt
    * Now, run: ```conda activate pyPower```
-   * Go to the directory where ```Functions.py```, ```PowerAnalysis.py``` and ```Input_file.csv``` are located using ```cd```
-   * Now, run: ```python PowerAnalysis.py IC``` or ```python PowerAnalysis.py GD``` depending on whether you want to use the internal correlation criterion or the group difference criterion
+   
+   To run COMPASS:
+   * Go to the directory where the COMPASS files are stored using ```cd```
+   * Now, run: ```python PowerAnalysis.py IC```, ```python PowerAnalysis.py EC``` or ```python PowerAnalysis.py GD``` depending on the criterion that you want to use.
 
 4. Check the output in the shell & the stored figure(s) in the _output_folder_
    * _power estimate_: the probability to obtain adequate parameter estimates
@@ -155,11 +211,11 @@ This allows the researcher to elegantly compare the effect of changing a certain
 
 - Internship student: Maud Beeckmans 
     * [E-mail me at Maud (dot) Beeckmans (at) UGent (dot) be](mailto:Maud.Beeckmans@UGent.be)
-- Supervising PhD researcher: Pieter Verbeke
+- Supervising Post-doc researcher: Pieter Verbeke
     * [E-mail me at pjverbek (dot) Verbeke (at) UGent (dot) be](mailto:pjverbek.Verbeke@UGent.be)
 - Supervising PhD researcher: Pieter Huycke
     * [E-mail me at Pieter (dot) Huycke (at) UGent (dot) be](mailto:Pieter.Huycke@UGent.be)
 - Supervising professor: Tom Verguts
     * [E-mail me at Tom (dot) Verguts (at) UGent (dot) be](mailto:Tom.Verguts@UGent.be)
 
-**Last edit: 3 November 2022**
+**Last edit: December 20th 2022**
