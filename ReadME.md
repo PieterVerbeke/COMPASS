@@ -216,8 +216,8 @@ Power computations consist of the following five steps:
 
     Example output: 
     
-    <img width="800" alt="image" src="https://github.com/MaudBeeckmans/COMPASS/blob/Version-0.2/Figures/ReadMe/OutputIC_shellexample.png">
-    <img width="500" alt="image" src="https://github.com/MaudBeeckmans/COMPASS/blob/Version-0.2/Figures/ReadMe/OutputIC_plotexample.png">
+    <img width="800" alt="image" src="https://github.com/PieterVerbeke/COMPASS/tree/Version-0.2/Figures_ReadMe/Output_terminal.jpg">
+    <img width="500" alt="image" src="https://github.com/MaudBeeckmans/COMPASS/blob/Version-0.2/Figures/ReadMe/Output_plot.jpg">
     
 # Contact
 - Corresponding author: Pieter Verbeke

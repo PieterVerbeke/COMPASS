@@ -304,7 +304,7 @@ if __name__ == '__main__':
             if HPC == False:
                 fig, axes = plt.subplots(nrows = 1, ncols = 1)
                 sns.kdeplot(output["correlations"], label = "correlations", ax = axes)
-                fig.suptitle("P(correlation >= {} with {} pp, {} trials)".format(tau, npp, ntrials), fontweight = 'bold')
+                fig.suptitle("Pr(correlation >= {} with {} pp, {} trials)".format(tau, npp, ntrials), fontweight = 'bold')
                 axes.set_title("Power = {}% based on {} reps".format(np.round(power_estimate*100, 2), nreps))
                 axes.axvline(x = tau, lw = 2, linestyle ="dashed", color ='k', label ='tau')
 
@@ -335,8 +335,8 @@ if __name__ == '__main__':
             if HPC == False:
                 fig, axes = plt.subplots(nrows = 1, ncols = 1)
                 sns.kdeplot(output["Statistic"], label = "T", ax = axes)
-                fig.suptitle("P(p-value <= {}) with {} pp, {} trials".format(typeIerror, npp_pergroup, ntrials), fontweight = 'bold')
-                axes.set_title("Power = {}% based on {} reps with ES = {}".format(np.round(power_estimate*100, 2), nreps, cohens_d))
+                fig.suptitle("Pr(T-statistic > {}) considering a type I error of {} with {} pp, {} trials".format(tau, typeIerror, npp_pergroup, ntrials), fontweight = 'bold')
+                axes.set_title("Power = {}% based on {} reps with Cohen's d = {}".format(np.round(power_estimate*100, 2), nreps, cohens_d))
                 axes.axvline(x = tau, lw = 2, linestyle ="dashed", color ='k', label ='tau')
 
         elif criterion == "EC":
@@ -348,7 +348,7 @@ if __name__ == '__main__':
             s_pooled = sdLR
 
             beta_distribution = stat.beta((npp/2)-1, (npp/2)-1, loc = -1, scale = 2)
-            tau = -beta_distribution.ppf(typeIerror)
+            tau = -beta_distribution.ppf(typeIerror/2)
 
             output, power_estimate = power_estimation_Excorrelation(npp = npp, ntrials = ntrials, nreps = nreps,
                                                                   typeIerror = typeIerror,
@@ -362,7 +362,7 @@ if __name__ == '__main__':
             if HPC == False:
                 fig, axes = plt.subplots(nrows = 1, ncols = 1)
                 sns.kdeplot(output["Statistic"], label = "T", ax = axes)
-                fig.suptitle("P(p-value <= {}) with {} pp, {} trials".format(typeIerror, npp, ntrials), fontweight = 'bold')
+                fig.suptitle("Pr(Correlation > {}) considering a type I error of {} with {} pp, {} trials".format(tau, typeIerror, npp, ntrials), fontweight = 'bold')
                 axes.set_title("Power = {}% based on {} reps with true correlation {}".format(np.round(power_estimate*100, 2), nreps, True_correlation))
                 axes.axvline(x = tau, lw = 2, linestyle ="dashed", color ='k', label ='tau')
 

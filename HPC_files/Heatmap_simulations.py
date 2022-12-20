@@ -21,17 +21,18 @@ nreps = 1000
 def plot3D(criterion = 'IC', ntrials = np.arange(80, 1000, 160),
                ireversal = 40, npp = np.arange(40, 201, 20),
            sd = 0.2, main_folder = folder, nreps = 100, tau = 0.75, typeIerror = 0.05):
+    labels = ["A", "B", "C"]
     if criterion == 'IC':
         ess = [.1, .2]
         ES_text = ''
-        title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B1" +")) >= {}) with nreps = {}".format(tau, nreps)
+        title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B1" +")) >= {}) with Nreps = {}".format(tau, nreps)
         tau = tau
     elif criterion == 'GD':
         ess = [.2, .5]
-        title = "Pr(" + "\u1FB6" + "_g1 >" + "\u1FB6" + "_g2" + ") with p-value threshold = {} and nreps = {}".format(typeIerror, nreps)
+        title = "Pr(" + "\u1FB6" + "_g1 >" + "\u1FB6" + "_g2" + ") with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
     elif criterion == 'EC':
         ess = [.1, .3]
-        title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B4" +")) with p-value threshold = {} and nreps = {}".format(typeIerror, nreps)
+        title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B4" +")) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
     else:
         print("incorrect criterion")
         sys.exit()
@@ -68,9 +69,10 @@ def plot3D(criterion = 'IC', ntrials = np.arange(80, 1000, 160),
         fig.suptitle(title, fontweight = 'bold')
         axes[i].set_ylabel('trials', loc = 'top')
         axes[i].set_xlabel('participants', loc = 'right')
-        if criterion == 'IC': axes[i].set_title('SD = {}'.format(sd))
-        elif criterion == 'GD': axes[i].set_title('ES = {}, SD = {}'.format(ess[i], sd))
-        elif criterion == 'EC': axes[i].set_title('ES = {}, SD = {}'.format(ess[i], sd))
+        axes[i].set_title(labels[i])
+        if criterion == 'IC': axes[i].set_title(labels[i] + ': SD = {}'.format(sd))
+        elif criterion == 'GD': axes[i].set_title(labels[i] + ': Cohen\'s d = {}, SD = {}'.format(ess[i], sd))
+        elif criterion == 'EC': axes[i].set_title(labels[i] + ': True correlation = {}, SD = {}'.format(ess[i], sd))
 
         fig.set_size_inches((12, 6), forward=False)
         fig.tight_layout()
