@@ -45,7 +45,7 @@ The design is created for *ntrials*. As demonstrated in the manuscript, this is 
 
 ## Important note: the required computational time. 
 
-```To specify by the user: npp, nreps, full_speed````
+```To specify by the user: npp, nreps, full_speed```
 
 As we perform parameter estimations for *nreps* Monte Carlo repetitions, computational time can increase exponentially.  
 The computational time strongly depends on the number of participants (*npp*) and the number of Monte Carlo repetitions (*nreps*). We recommend to set *nreps* to 250. Smaller numbers can be used as well but then power computations will be less precise.   
