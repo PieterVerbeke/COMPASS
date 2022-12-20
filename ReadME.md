@@ -25,7 +25,7 @@ More details can be found in the manuscript: *Insert link when preprint is onlin
 ## The model and task currently implemented in COMPASS
 ### The RW model
 
-```To specify by the user: *meanLR, sdLR, meanInverseTemperature and sdInverseTemperature*```
+```To specify by the user: meanLR, sdLR, meanInverseTemperature and sdInverseTemperature```
 
 The RW model is used to fit participants’ behaviour in this task.   
 The core of the model is formed by the delta-learning rule and the softmax choice rule.   
@@ -34,7 +34,7 @@ The population distribution of these parameters can be specified by the user in 
 
 ### Two-armed bandit task
 
-```To specify by the user: *ntrials, nreversals, reward_probability*``` 
+```To specify by the user: ntrials, nreversals, reward_probability``` 
 
 Based on the parameters that are implemented in the csv files, a task design is created.  
 In this task design, there are two stimuli/bandits and two possible actions (selecting bandit 1 or 2).   
@@ -45,7 +45,7 @@ The design is created for *ntrials*. As demonstrated in the manuscript, this is 
 
 ## Important note: the required computational time. 
 
-```To specify by the user: *npp, nreps, full_speed*````
+```To specify by the user: npp, nreps, full_speed````
 
 As we perform parameter estimations for *nreps* Monte Carlo repetitions, computational time can increase exponentially.  
 The computational time strongly depends on the number of participants (*npp*) and the number of Monte Carlo repetitions (*nreps*). We recommend to set *nreps* to 250. Smaller numbers can be used as well but then power computations will be less precise.   
@@ -67,7 +67,7 @@ For all criterions, power is specified as
 
 Here, the statistic differs across criterions and the cut-off and hypothesis should be specified by the user.  
 
-Each parameter recovery analysis consists of the following five steps:   
+Power computations consist of the following five steps:   
   1. Sample *npp* participants from the population.   
   This sampling process is guided by the hypothesis (population distribution of parameter values, true correlation or difference between groups) that is specified by the user in the csv files.  
   2. Simulate data for each participant.  
@@ -80,10 +80,11 @@ Each parameter recovery analysis consists of the following five steps:
       - _group_difference_: T-statistic of difference in parameter values between two groups.    
   5. Evaluate which proportion of statistics reached the cut-off value.  
 
-### The steps
+### The steps for the user
 1. Make sure that COMPASS is installed correctly (see Installation guide above).  
 
-2. Choose a criterion and specify variables in the corresponding csv file.    
+2. Choose a criterion and specify variables in the corresponding csv file.
+*Notice that multiple rows can be specified in the csv files, power computations will be performed for each row that is completed by the user*  
   2a) Internal Correlation (IC): Correlation between sampled and estimated parameter values.  
   
   Open the InputFile_IC and specify  
