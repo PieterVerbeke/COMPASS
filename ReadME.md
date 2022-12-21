@@ -155,7 +155,7 @@ Power computations consist of the following five steps:
 	**Path to the folder where the output-figure(s) will be stored**
 	- e.g. "C:\Users\maudb\Downloads"
 	
-	2c) Group Difference (GD): T-statistic for difference between estimated parameter values of two groups.
+  2c) Group Difference (GD): T-statistic for difference between estimated parameter values of two groups.
 
   Open the InputFile_GD and specify  
   * _ntrials_: integer 𝜖 [5, +∞[
@@ -214,10 +214,11 @@ Power computations consist of the following five steps:
      - x-axis: values for the statistic of interest (correlation or T-Statistic)
      - y-axis: probability density for each value
 
-    Example output: 
+    Example output (EC criterion): 
     
-    <img width="800" alt="image" src="https://github.com/PieterVerbeke/COMPASS/tree/Version-0.2/Figures_ReadMe/Output_terminal.png">
-    <img width="500" alt="image" src="https://github.com/PieterVerbeke/COMPASS/tree/Version-0.2/Figures_ReadMe/Output_plot.png">
+    <img width="800" alt="image" src="https://github.com/PieterVerbeke/COMPASS/blob/Version-0.2/Figures_ReadMe/Output_terminal.png">  
+    
+    <img width="500" alt="image" src="https://github.com/PieterVerbeke/COMPASS/blob/Version-0.2/Figures_ReadMe/Output_plot.png">
     
 # Contact
 - Corresponding author: Pieter Verbeke
