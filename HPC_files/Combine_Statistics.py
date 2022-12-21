@@ -48,5 +48,5 @@ nreps = int(input_parameters[3])
 
 combine_output(criterion = criterion, variable = 'Statistic', ntrials = np.arange(80, 1000, 160),
                ireversal = 40, npp = np.arange(40, 201, 20), sd = SD, ES = ES,
-               main_folder = r'/data/gent/442/vsc44254/COMPASS/Version2022_2023',
+               main_folder = r'/data/gent/430/vsc43099/COMPASS',
                nreps = nreps)

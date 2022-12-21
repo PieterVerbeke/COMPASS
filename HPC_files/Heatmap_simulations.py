@@ -13,8 +13,8 @@ import seaborn as sns
 from scipy import stats as stat
 
 
-folder = '/Users/pieter/Documents/COMPASS_reserve/COMPASS/HPC_files/Output'
-criterion = 'IC'
+folder = '/Users/pieter/Documents/GitHub/COMPASS/HPC_files/Output'
+criterion = 'EC'
 sd = 0.1
 nreps = 1000
 
@@ -25,14 +25,17 @@ def plot3D(criterion = 'IC', ntrials = np.arange(80, 1000, 160),
     if criterion == 'IC':
         ess = [.1, .2]
         ES_text = ''
-        title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B1" +")) >= {}) with Nreps = {}".format(tau, nreps)
+        #title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B1" +")) >= {}) with Nreps = {}".format(tau, nreps)
+        title = "Pr(Internal correlation >= {}) with Nreps = {}".format(tau, nreps)
         tau = tau
     elif criterion == 'GD':
         ess = [.2, .5]
-        title = "Pr(" + "\u1FB6" + "_g1 >" + "\u1FB6" + "_g2" + ") with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
+        #title = "Pr(" + "\u1FB6" + "_g1 >" + "\u1FB6" + "_g2" + ") with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
+        title = "Pr(T-statistic > tau) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
     elif criterion == 'EC':
-        ess = [.1, .3]
-        title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B4" +")) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
+        ess = [.1]#, .3]
+        #title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B4" +")) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
+        title = "Pr(External correlation > tau) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
     else:
         print("incorrect criterion")
         sys.exit()

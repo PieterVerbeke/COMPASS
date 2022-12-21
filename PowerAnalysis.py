@@ -233,7 +233,11 @@ def power_estimation_groupdifference(npp_per_group = 20, ntrials = 480, nreps = 
             print("\nPower to obtain a significant group difference under conventional implementation: {}%".format(np.round(power_true*100,2)))
 
         #divide process over multiple cores
-        LR_distributions = np.array([[mean_LRdistributionG1, SD_LRdistributionG1], [mean_LRdistributionG2, SD_LRdistributionG2]])
+        if mean_LRdistributionG1 > mean_LRdistributionG2:
+            LR_distributions = np.array([[mean_LRdistributionG1, SD_LRdistributionG1], [mean_LRdistributionG2, SD_LRdistributionG2]])
+        else:
+            LR_distributions = np.array([[mean_LRdistributionG2, SD_LRdistributionG2], [mean_LRdistributionG1, SD_LRdistributionG1]])
+
         inverseTemp_distributions = np.array([[mean_inverseTempdistributionG1, SD_inverseTempdistributionG1],
                                               [mean_inverseTempdistributionG2, SD_inverseTempdistributionG2]])
         pool = Pool(processes = n_cpu)
@@ -248,7 +252,7 @@ def power_estimation_groupdifference(npp_per_group = 20, ntrials = 480, nreps = 
         # check for which % of repetitions the group difference was significant
         # note that we're working with a one-sided t-test (if interested in two-sided need to divide the p-value obtained at each rep with 2)
         power_estimate = np.mean((allreps_output['PValue'] <= typeIerror))
-        print(str("\nPower to detect a significant group difference when the estimated effect size d = {}".format(np.round(cohens_d,4))
+        print(str("\nPower to detect a significant group difference when the estimated effect size d = {}".format(np.round(cohens_d,3))
               + " with {} trials and {} participants per group: {}%".format(ntrials,
                                                                          npp_per_group, np.round(power_estimate*100,2))))
         return allreps_output, power_estimate
@@ -300,9 +304,9 @@ if __name__ == '__main__':
                                                                                       npp, nreps)))
             if HPC == False:
                 fig, axes = plt.subplots(nrows = 1, ncols = 1)
-                sns.kdeplot(output["correlations"], label = "correlations", ax = axes)
-                fig.suptitle("Pr(correlation >= {}) \nwith {} pp, {} trials)".format(tau, npp, ntrials), fontweight = 'bold')
-                axes.set_title("Power = {}% based on {} reps".format(np.round(power_estimate*100, 2), nreps))
+                sns.kdeplot(output["correlations"], label = "Correlations", ax = axes)
+                fig.suptitle("Pr(Correlation >= {}) \nwith {} pp, {} trials)".format(tau, npp, ntrials), fontweight = 'bold')
+                axes.set_title("Power = {}% \nbased on {} reps".format(np.round(power_estimate*100, 2), nreps))
                 axes.axvline(x = tau, lw = 2, linestyle ="dashed", color ='k', label ='tau')
 
         elif criterion == "GD":
@@ -314,7 +318,7 @@ if __name__ == '__main__':
             meanInverseT_g2, sdInverseT_g2 = InputDictionary['meanInverseTemperature_g2'][row], InputDictionary['sdInverseTemperature_g2'][row]
             typeIerror = InputDictionary['TypeIerror'][row]
             # Calculate tau based on the typeIerror and the df
-            tau = stat.t.ppf(1-(typeIerror*2), npp_pergroup*2-1)
+            tau = -stat.t.ppf(typeIerror, npp-1)
             s_pooled = np.sqrt((sdLR_g1**2 + sdLR_g2**2) / 2)
             cohens_d = np.abs(meanLR_g1-meanLR_g2)/s_pooled
 
@@ -328,12 +332,12 @@ if __name__ == '__main__':
             output.to_csv(os.path.join(output_folder, 'OutputGD{}SD{}T{}R{}N{}M{}ES.csv'.format(np.round(s_pooled,2),
                                                                                                 ntrials,
                                                                                       nreversals,
-                                                                                      npp, nreps, cohens_d)))
+                                                                                      npp, nreps, np.round(cohens_d,2))))
             if HPC == False:
                 fig, axes = plt.subplots(nrows = 1, ncols = 1)
-                sns.kdeplot(output["Statistic"], label = "T", ax = axes)
+                sns.kdeplot(output["Statistic"], label = "T-statistic", ax = axes)
                 fig.suptitle("Pr(T-statistic > {}) \nconsidering a type I error of {} \nwith {} pp, {} trials".format(np.round(tau,2), typeIerror, npp_pergroup, ntrials), fontweight = 'bold')
-                axes.set_title("Power = {}% based on {} reps with Cohen's d = {}".format(np.round(power_estimate*100, 2), nreps, np.round(cohens_d,2)))
+                axes.set_title("Power = {}% \nbased on {} reps with Cohen's d = {}".format(np.round(power_estimate*100, 2), nreps, np.round(cohens_d,2)))
                 axes.axvline(x = tau, lw = 2, linestyle ="dashed", color ='k', label ='tau')
 
         elif criterion == "EC":
@@ -358,9 +362,9 @@ if __name__ == '__main__':
                                                                                       npp, nreps)))
             if HPC == False:
                 fig, axes = plt.subplots(nrows = 1, ncols = 1)
-                sns.kdeplot(output["Statistic"], label = "T", ax = axes)
+                sns.kdeplot(output["Statistic"], label = "Correlation", ax = axes)
                 fig.suptitle("Pr(Correlation > {}) \nconsidering a type I error of {} \nwith {} pp, {} trials".format(np.round(tau,2), typeIerror, npp, ntrials), fontweight = 'bold')
-                axes.set_title("Power = {}% based on {} reps with true correlation {}".format(np.round(power_estimate*100, 2), nreps, True_correlation))
+                axes.set_title("Power = {}% \nbased on {} reps with true correlation {}".format(np.round(power_estimate*100, 2), nreps, True_correlation))
                 axes.axvline(x = tau, lw = 2, linestyle ="dashed", color ='k', label ='tau')
 
 
