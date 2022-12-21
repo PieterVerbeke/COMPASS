@@ -214,7 +214,7 @@ Power computations consist of the following five steps:
      - x-axis: values for the statistic of interest (correlation or T-Statistic)
      - y-axis: probability density for each value
 
-    Example output: 
+    Example output (EC criterion): 
     
     <img width="800" alt="image" src="https://github.com/PieterVerbeke/COMPASS/blob/Version-0.2/Figures_ReadMe/Output_terminal.png">  
     
