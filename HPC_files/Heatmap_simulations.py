@@ -14,14 +14,13 @@ from scipy import stats as stat
 
 
 folder = '/Users/pieter/Documents/GitHub/COMPASS/HPC_files/Output'
-criterion = 'EC'
+criterion = 'GD'
 sd = 0.1
 nreps = 1000
 
 def plot3D(criterion = 'IC', ntrials = np.arange(80, 1000, 160),
                ireversal = 40, npp = np.arange(40, 201, 20),
            sd = 0.2, main_folder = folder, nreps = 100, tau = 0.75, typeIerror = 0.05):
-    labels = ["A", "B", "C"]
     if criterion == 'IC':
         ess = [.1, .2]
         ES_text = ''
@@ -72,14 +71,19 @@ def plot3D(criterion = 'IC', ntrials = np.arange(80, 1000, 160),
         fig.suptitle(title, fontweight = 'bold')
         axes[i].set_ylabel('trials', loc = 'top')
         axes[i].set_xlabel('participants', loc = 'right')
-        axes[i].set_title(labels[i])
-        if criterion == 'IC': axes[i].set_title(labels[i] + ': SD = {}'.format(sd))
-        elif criterion == 'GD': axes[i].set_title(labels[i] + ': Cohen\'s d = {}, SD = {}'.format(ess[i], sd))
-        elif criterion == 'EC': axes[i].set_title(labels[i] + ': True correlation = {}, SD = {}'.format(ess[i], sd))
+        if criterion == 'IC': axes[i].set_title("SD = {}".format(sd))
+        elif criterion == 'GD': axes[i].set_title("Cohen\'s d = {}".format(ess[i]))
+        elif criterion == 'EC': axes[i].set_title("True correlation = {}".format(ess[i]))
 
-        fig.set_size_inches((12, 6), forward=False)
-        fig.tight_layout()
-        fig.savefig(os.path.join(plot_folder, 'Heatmap{}_{}nreps.png'.format(criterion, nreps)))
+
+    labels = ["A", "B"]
+    coord = [(0.025, 0.91), (0.525, 0.91)]
+    for j in  range(len(labels)):
+        # label physical distance to the lef
+        fig.text(coord[j][0], coord[j][1], labels[j], fontsize='medium', fontweight = "bold", va='bottom')
+    fig.set_size_inches((12, 6), forward=False)
+    fig.tight_layout()
+    fig.savefig(os.path.join(plot_folder, 'Heatmap{}_{}nreps.png'.format(criterion, nreps)))
 
     return Power_df
 
