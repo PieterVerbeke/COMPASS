@@ -314,7 +314,7 @@ if __name__ == '__main__':
             meanInverseT_g2, sdInverseT_g2 = InputDictionary['meanInverseTemperature_g2'][row], InputDictionary['sdInverseTemperature_g2'][row]
             typeIerror = InputDictionary['TypeIerror'][row]
             # Calculate tau based on the typeIerror and the df
-            tau = stat.t.ppf(1-typeIerror, npp_pergroup*2-1)
+            tau = stat.t.ppf(1-(typeIerror*2), npp_pergroup*2-1)
             s_pooled = np.sqrt((sdLR_g1**2 + sdLR_g2**2) / 2)
             cohens_d = np.abs(meanLR_g1-meanLR_g2)/s_pooled
 
@@ -332,8 +332,8 @@ if __name__ == '__main__':
             if HPC == False:
                 fig, axes = plt.subplots(nrows = 1, ncols = 1)
                 sns.kdeplot(output["Statistic"], label = "T", ax = axes)
-                fig.suptitle("Pr(T-statistic > {}) \nconsidering a type I error of {} \nwith {} pp, {} trials".format(npr.round(tau,2), typeIerror, npp_pergroup, ntrials), fontweight = 'bold')
-                axes.set_title("Power = {}% based on {} reps with Cohen's d = {}".format(np.round(power_estimate*100, 2), nreps, cohens_d))
+                fig.suptitle("Pr(T-statistic > {}) \nconsidering a type I error of {} \nwith {} pp, {} trials".format(np.round(tau,2), typeIerror, npp_pergroup, ntrials), fontweight = 'bold')
+                axes.set_title("Power = {}% based on {} reps with Cohen's d = {}".format(np.round(power_estimate*100, 2), nreps, np.round(cohens_d,2)))
                 axes.axvline(x = tau, lw = 2, linestyle ="dashed", color ='k', label ='tau')
 
         elif criterion == "EC":
