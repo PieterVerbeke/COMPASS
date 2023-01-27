@@ -10,7 +10,7 @@ In the current version, use is limited to the Rescorla-Wagner (RW) model in two-
 More details can be found in the manuscript: *Insert link when preprint is online*
 
 ## Installation guide
-*Step 1:* Downloading all folders and storing them locally on your own pc. 
+*Step 1:* Downloading all code and storing them locally on your own pc. 
 
 *Step 2:* Creating the PyPower environment  
   
@@ -216,9 +216,9 @@ Power computations consist of the following five steps:
 
     Example output (EC criterion): 
     
-    <img width="800" alt="image" src="https://github.com/PieterVerbeke/COMPASS/blob/Version-0.2/Figures_ReadMe/Output_terminal.png">  
+    <img width="800" alt="image" src="https://github.com/CogComNeuroSci/COMPASS/blob/main/Figures_ReadMe/Output_terminal.png">  
     
-    <img width="500" alt="image" src="https://github.com/PieterVerbeke/COMPASS/blob/Version-0.2/Figures_ReadMe/Output_plot.png">
+    <img width="500" alt="image" src="https://github.com/CogComNeuroSci/COMPASS/blob/main/Figures_ReadMe//Output_plot.png">
     
 # Contact
 - Corresponding author: Pieter Verbeke
