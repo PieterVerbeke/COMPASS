@@ -13,8 +13,8 @@ import seaborn as sns
 from scipy import stats as stat
 
 
-folder = '/Users/pieter/Documents/GitHub/CogComNeuroSci_COMPASS/HPC_files/Output'
-criterion = 'IC'
+folder = '/Users/pieter/Documents/GitHub/COMPASS/HPC_files/Output'
+criterion = 'EC'
 sd = 0.1
 nreps = 1000
 
@@ -28,11 +28,11 @@ def plot3D(criterion = 'IC', ntrials = np.arange(80, 1000, 160),
         title = "Pr(Internal correlation >= {}) with Nreps = {}".format(tau, nreps)
         tau = tau
     elif criterion == 'GD':
-        ess = [.2, .5, .8]
+        ess = [.2, .4, .6]
         #title = "Pr(" + "\u1FB6" + "_g1 >" + "\u1FB6" + "_g2" + ") with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
         title = "Pr(T-statistic > tau) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
     elif criterion == 'EC':
-        ess = [.1, .3, .5]
+        ess = [.1, .2, .4]
         #title = "Pr("+"\u03C1"+"("+ "\u1FB6" + "," + "\u03B4" +")) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
         title = "Pr(External correlation > tau) with p-value threshold = {} and Nreps = {}".format(typeIerror, nreps)
     else:
@@ -84,7 +84,7 @@ def plot3D(criterion = 'IC', ntrials = np.arange(80, 1000, 160),
         fig.text(coord[j][0], coord[j][1], labels[j], fontsize = 12, fontweight = "bold", va='bottom')
     fig.set_size_inches((15, 6.5), forward=False)
     fig.tight_layout()
-    fig.savefig(os.path.join(plot_folder, 'Heatmap{}_{}nreps.png'.format(criterion, nreps)))
+    fig.savefig(os.path.join(plot_folder, 'Heatmap{}_{}nreps.png'.format(criterion, nreps)), dpi = 200)
 
     return Power_df
 
